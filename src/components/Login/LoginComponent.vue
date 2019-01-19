@@ -26,26 +26,53 @@
       </div>
 
       <div class="login__block__body">
-        <div class="form-group">
-          <input type="text" class="form-control text-center" placeholder="Email Address">
+        <form>
+          <div class="form-group">
+          <input type="text"  class="form-control text-center" placeholder="Email Address">
         </div>
 
         <div class="form-group">
           <input type="password" class="form-control text-center" placeholder="Password">
         </div>
 
-        <a href="index.html" class="btn btn--icon login__block__btn">
-          <i class="zmdi zmdi-long-arrow-right"></i>
-        </a>
+        <button class="btn btn--icon login__block__btn" type="submit"><i class="zmdi zmdi-long-arrow-right"></i></button>
+
+        </form>
+        
       </div>
     </div>
 </template>
 
 <script>
+
+import store from '@/store';
+//import users from '@/modules/users';
+import user from '@/api/user';
+
 export default {
   name: 'LoginComponent',
   props: {
     msg: String
+  },
+  data() {
+    return {
+        users: []
+    };
+  },
+  created() {
+    user.fetchUsersAPI().then((response) => {
+        console.log(response);
+    });
+  },
+  computed:{
+    fetchUsers(){
+      return store.state.users;
+    }
+  },
+  methods: {
+      showRecipes() {
+          alert("test");
+      }
   }
 }
 </script>
