@@ -1,32 +1,38 @@
 <template>
-  <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/login">Login</router-link>
-    </div> -->
-    <router-view/>
-  </div>
+<main class="main">
+  <router-view/>
+</main>
 </template>
+<script src="<%= BASE_URL %>vendors/bower_components/js/jquery.min.js"></script>
+<script>
+import router from '@/router';
 
-
-
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #fff;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+export default {
+  name: 'App',
+  props: {
+    msg: String
+  },
+  created(){
+    $(".scrollbar-inner").scrollbar().scrollLock();
   }
 }
-</style>
+
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login', '/register'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('token');
+
+  if (authRequired && !loggedIn) {
+    return next('/login');
+  }
+
+  next();
+})
+
+</script>
+
+
+
+
+

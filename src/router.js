@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Login from './views/Login.vue'
+import Login from './views/Login.vue' 
+import Widgets from './views/Widgets.vue'   
+import BasicLayout from './components/Content/BasicLayout.vue'
 
 Vue.use(Router)
 
@@ -12,7 +14,21 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          // UserProfile will be rendered inside User's <router-view>
+          // when /user/:id/profile is matched
+          path: '/',
+          component: BasicLayout
+        },
+        {
+          // UserProfile will be rendered inside User's <router-view>
+          // when /user/:id/profile is matched
+          path: '/widgets',
+          component: Widgets
+        }
+      ]
     },
     {
       path: '/login',
@@ -22,9 +38,6 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     }
   ]

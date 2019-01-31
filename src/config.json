@@ -1,0 +1,11 @@
+{
+    "firebaseConfig":{
+        "apiKey": "AIzaSyCWlrZbKsoitARn0KjecTRHmswOOcIJh3Y",
+        "authDomain": "common-api-stack.firebaseapp.com",
+        "databaseURL": "https://common-api-stack.firebaseio.com",
+        "projectId": "common-api-stack",
+        "storageBucket": "common-api-stack.appspot.com",
+        "messagingSenderId": "835449743568"
+    },  
+    "apiUrl": "http://54.169.105.61:3000"
+}

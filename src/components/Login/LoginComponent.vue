@@ -26,13 +26,16 @@
       </div>
 
       <div class="login__block__body">
-        <form>
+        <form
+          id="loginForm"
+          @submit="loginUser"
+        >
           <div class="form-group">
-          <input type="text"  class="form-control text-center" placeholder="Email Address">
+          <input type="text" v-model="email" class="form-control text-center" placeholder="Email Address">
         </div>
 
         <div class="form-group">
-          <input type="password" class="form-control text-center" placeholder="Password">
+          <input type="password" v-model="password" class="form-control text-center" placeholder="Password">
         </div>
 
         <button class="btn btn--icon login__block__btn" type="submit"><i class="zmdi zmdi-long-arrow-right"></i></button>
@@ -46,7 +49,7 @@
 <script>
 
 import store from '@/store';
-//import users from '@/modules/users';
+import auth from '@/modules/auth';
 import user from '@/api/user';
 
 export default {
@@ -56,41 +59,79 @@ export default {
   },
   data() {
     return {
-        users: []
+        users: [],
+        errors: [],
+        email: null,
+        password: null
     };
   },
-  created() {
-    user.fetchUsersAPI().then((response) => {
-        console.log(response);
-    });
-  },
-  computed:{
-    fetchUsers(){
-      return store.state.users;
-    }
-  },
   methods: {
-      showRecipes() {
-          alert("test");
+      loginUser(e) {
+          let request = {
+            email: this.email,
+            password: this.password
+          }
+          console.log(request);
+          this.$store.dispatch('loginUserByEmailPassword', request);
+          e.preventDefault();
       }
+  },
+  created(){
+    
+    $(document).ready(function() {
+        function a(a) {
+            a.requestFullscreen ? a.requestFullscreen() : a.mozRequestFullScreen ? a.mozRequestFullScreen() : a.webkitRequestFullscreen ? a.webkitRequestFullscreen() : a.msRequestFullscreen && a.msRequestFullscreen()
+        }
+        $("body").on("click", "[data-sa-action]", function(b) {
+            b.preventDefault();
+            var c = $(this),
+                d = c.data("sa-action"),
+                e = "";
+            switch (d) {
+                case "search-open":
+                    $(".search").addClass("search--toggled");
+                    break;
+                case "search-close":
+                    $(".search").removeClass("search--toggled");
+                    break;
+                case "aside-open":
+                    e = c.data("sa-target"), c.addClass("toggled"), $("body").addClass("aside-toggled"), $(e).addClass("toggled"), $(".content, .header").append('<div class="sa-backdrop" data-sa-action="aside-close" data-sa-target=' + e + " />");
+                    break;
+                case "aside-close":
+                    e = c.data("sa-target"), $("body").removeClass("aside-toggled"), $('[data-sa-action="aside-open"], ' + e).removeClass("toggled"), $(".content, .header").find(".sa-backdrop").remove();
+                    break;
+                case "fullscreen":
+                    a(document.documentElement);
+                    break;
+                case "print":
+                    window.print();
+                    break;
+                case "login-switch":
+                    e = c.data("sa-target"), $(".login__block").removeClass("active"), $(e).addClass("active");
+                    break;
+                case "notifications-clear":
+                    b.stopPropagation();
+                    var f = $(".top-nav__notifications .listview__item"),
+                        g = f.length,
+                        h = 0;
+                    c.fadeOut(), f.each(function() {
+                        var a = $(this);
+                        setTimeout(function() {
+                            a.addClass("animated fadeOutRight")
+                        }, h += 150)
+                    }), setTimeout(function() {
+                        f.remove(), $(".top-nav__notifications").addClass("top-nav__notifications--cleared")
+                    }, 180 * g);
+                    break;
+                case "toolbar-search-open":
+                    $(this).closest(".toolbar").find(".toolbar__search").fadeIn(200), $(this).closest(".toolbar").find(".toolbar__search input").focus();
+                    break;
+                case "toolbar-search-close":
+                    $(this).closest(".toolbar").find(".toolbar__search input").val(""), $(this).closest(".toolbar").find(".toolbar__search").fadeOut(200)
+            }
+        })
+    });
+
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
