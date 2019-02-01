@@ -1,5 +1,6 @@
 <template>
   <div class="login__block active" id="l-login">
+      
       <div class="login__block__header">
         <i class="zmdi zmdi-account-circle"></i>
         Hi there! Please Sign in
@@ -24,8 +25,11 @@
           </div>
         </div>
       </div>
-
+        <div v-if="loginErrors" class="alert alert-danger" role="alert">
+            {{errorMessage}}}
+        </div>
       <div class="login__block__body">
+          
         <form
           id="loginForm"
           @submit="loginUser"
@@ -62,18 +66,30 @@ export default {
         users: [],
         errors: [],
         email: null,
-        password: null
+        password: null,
+        errorLogin: this.$store.loginErrors
     };
   },
+  computed: {
+      loginErrors(){
+          console.log(auth.state.loginErrors)
+          return this.$store.state.loginErrors;
+      },
+      errorMessage(){
+          return this.$store.state.errorMessage;
+      }
+  },
   methods: {
-      loginUser(e) {
-          let request = {
-            email: this.email,
-            password: this.password
-          }
-          console.log(request);
-          this.$store.dispatch('loginUserByEmailPassword', request);
-          e.preventDefault();
+      async loginUser(e) {
+            let request = {
+                email: this.email,
+                password: this.password
+            }
+            console.log(request);
+            this.$store.dispatch('loginUserByEmailPassword', request).then((res) => {
+                console.log(res);
+            });
+            e.preventDefault();
       }
   },
   created(){

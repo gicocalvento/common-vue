@@ -6,7 +6,9 @@ export default {
     state: {
         users: user.getUsers(),
         apiUrl: 'https://api.edamam.com/search',
-        count: 0
+        count: 0,
+        loginErrors: false,
+        errorMessage: ""
     },
     mutations: {
         increment (state) {
@@ -14,13 +16,19 @@ export default {
         },
         loginUserByEmailPassword(context, request){
             console.log("MUTATE!");
-            auth.loginUserByEmailPassword(request).then((response) => {
+            return auth.loginUserByEmailPassword(request).then((response) => {
                 console.log(response);
                 if(response.data.status == "success"){
                     localStorage.setItem('token', JSON.stringify(response.data.data.user.stsTokenManager.accessToken));
                     router.push("/");
+                }else{
+                    this.state.loginErrors = true;
+                    this.state.errorMessage = response.data.message;
                 }
-            })
+                return response.data
+            }).catch((error)=>{
+                console.log(error);
+            });
             
         }   
     },  

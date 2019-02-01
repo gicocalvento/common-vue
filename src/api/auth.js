@@ -4,12 +4,7 @@ const config = require('../config.json');
 export default {
     
     loginUserByEmailPassword(request){
-        return axios.post( config.apiUrl + '/api/auth/loginUserByEmail', request).then(response => {
-            return response;
-        })
-        .catch(error => {
-           return error;
-        });
+        return axios.post( config.apiUrl + '/api/auth/loginUserByEmail', request);
     }
     
 };
